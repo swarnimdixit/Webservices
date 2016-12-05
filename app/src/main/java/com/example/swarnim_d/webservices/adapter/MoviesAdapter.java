@@ -6,6 +6,7 @@ package com.example.swarnim_d.webservices.adapter;
 
 
     import android.content.Context;
+    import android.content.Intent;
     import android.support.v7.widget.RecyclerView;
     import android.view.LayoutInflater;
     import android.view.View;
@@ -16,6 +17,8 @@ package com.example.swarnim_d.webservices.adapter;
     import java.util.List;
 
     import com.example.swarnim_d.webservices.R;
+    import com.example.swarnim_d.webservices.activity.MainActivity;
+    import com.example.swarnim_d.webservices.activity.MovieDetail;
     import com.example.swarnim_d.webservices.model.Movie;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
@@ -59,15 +62,38 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         @Override
         public void onBindViewHolder(MovieViewHolder holder, final int position) {
+
+            context = holder.moviesLayout.getContext();
+
+            final Movie clickedMovie = movies.get(holder.getAdapterPosition());
+
             holder.movieTitle.setText(movies.get(position).getTitle());
             holder.data.setText(movies.get(position).getReleaseDate());
             holder.movieDescription.setText(movies.get(position).getOverview());
             holder.rating.setText(movies.get(position).getVoteAverage().toString());
+
+
+            holder.moviesLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    MovieDetail movieDetail = new MovieDetail();
+                    Intent intent = new Intent((MainActivity)context,MovieDetail.class);
+                    intent.putExtra("movietitle",clickedMovie.getTitle());
+                    context.startActivity(intent);
+
+                }
+            });
+
+
         }
 
         @Override
         public int getItemCount() {
             return movies.size();
         }
+
+
+
     }
 

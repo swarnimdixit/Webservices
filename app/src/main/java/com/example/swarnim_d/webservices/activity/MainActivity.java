@@ -1,5 +1,7 @@
 package com.example.swarnim_d.webservices.activity;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,21 +35,28 @@ public class MainActivity extends AppCompatActivity {
             try {
                 JSONObject movieObject = (JSONObject) resultArray.get(i);
                 Movie movies = new Movie();
-                String title = movieObject.getString("title");
-                movies.setTitle(title);
-                String overview = movieObject.getString("overview");
-                movies.setOverview(overview);
+                movies.setTitle(movieObject.getString("title"));
+                movies.setOverview(movieObject.getString("overview"));
                 movies.setReleaseDate(movieObject.getString("release_date"));
                 movies.setOriginalLanguage(movieObject.getString("original_language"));
                 movies.setPopularity(movieObject.getDouble("popularity"));
                 movies.setVoteAverage(movieObject.getDouble("vote_average"));
                 movie.add(movies);
 
-                Log.d("asdf-------------", movie.get(i).getTitle());
+                DBHelper db = new DBHelper(this);
+                db.insertMovie(movies.getTitle(),movies.getOverview(),movies.getReleaseDate(),movies.getOriginalLanguage(),movies.getPopularity().toString(),movies.getVoteAverage().toString());
 
+
+                Log.d("asdf-------------", movie.get(i).getTitle());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+
+
+
+
+
         }
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.movies_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
